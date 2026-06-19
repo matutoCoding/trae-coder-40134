@@ -64,9 +64,30 @@
   color: $color-text-white;
 }
 
+.quotaWarning {
+  margin: 0 $spacing-lg $spacing-md;
+  background: rgba(245, 63, 63, 0.08);
+  border-radius: $radius-sm;
+  padding: $spacing-md;
+  border: 2rpx solid rgba(245, 63, 63, 0.2);
+}
+
+.quotaWarningText {
+  font-size: $font-size-sm;
+  color: $color-error;
+  font-weight: $font-weight-medium;
+}
+
 .slotSection {
   padding: $spacing-lg;
   background: $color-bg-card;
+  margin-bottom: $spacing-md;
+}
+
+.slotHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: $spacing-md;
 }
 
@@ -74,7 +95,12 @@
   font-size: $font-size-md;
   font-weight: $font-weight-medium;
   color: $color-text-primary;
-  margin-bottom: $spacing-md;
+}
+
+.quotaHint {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
 }
 
 .resultCard {
@@ -117,6 +143,28 @@
   color: $color-primary;
   margin-top: $spacing-md;
   line-height: $line-height-normal;
+}
+
+.reasonSection {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.reasonTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-accent;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.reasonItem {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+  display: block;
+  margin-bottom: 4rpx;
 }
 
 .historySection {

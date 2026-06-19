@@ -20,3 +20,8 @@ export interface TimeSlot {
   available: boolean;
   roomId?: string;
 }
+
+export interface AllocationResult {
+  room: import('@/types/room').Room;
+  reasons: string[];
+}
