@@ -1,0 +1,86 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.block {
+  display: flex;
+  align-items: stretch;
+  min-height: 64rpx;
+}
+
+.dotWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 8rpx;
+}
+
+.dotFree {
+  background: $color-free;
+}
+
+.dotBooked {
+  background: $color-occupied;
+}
+
+.line {
+  width: 2rpx;
+  flex: 1;
+  background: $color-border;
+  margin-top: 8rpx;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  padding: 8rpx 0;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.block:last-child .content {
+  border-bottom: none;
+}
+
+.timeRange {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.status {
+  font-size: $font-size-sm;
+}
+
+.statusFree {
+  color: $color-free;
+}
+
+.statusBooked {
+  color: $color-occupied;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

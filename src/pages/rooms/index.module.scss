@@ -1,0 +1,119 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.filterSection {
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  margin-bottom: $spacing-md;
+}
+
+.filterLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+}
+
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filterTag {
+  padding: 8rpx 24rpx;
+  border-radius: $radius-round;
+  background: $color-tag-bg;
+  margin-right: $spacing-sm;
+  margin-bottom: $spacing-sm;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.filterTagActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.filterText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.filterTagActive .filterText {
+  color: $color-text-white;
+}
+
+.overviewSection {
+  display: flex;
+  padding: 0 $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.overviewCard {
+  flex: 1;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: $spacing-md;
+}
+
+.overviewCard:last-child {
+  margin-right: 0;
+}
+
+.overviewValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  margin-bottom: 4rpx;
+}
+
+.overviewValueFree {
+  color: $color-free;
+}
+
+.overviewValueOccupied {
+  color: $color-occupied;
+}
+
+.overviewValueRepair {
+  color: $color-maintenance;
+}
+
+.overviewLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.listSection {
+  padding: 0 $spacing-lg;
+}
+
+.listTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.emptyTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

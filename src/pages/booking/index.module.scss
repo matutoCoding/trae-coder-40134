@@ -1,0 +1,186 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.dateSection {
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  margin-bottom: $spacing-md;
+}
+
+.dateLabel {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.dateRow {
+  display: flex;
+  @include scroll-x-container;
+}
+
+.dateItem {
+  @include scroll-x-item(120rpx);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-sm $spacing-xs;
+  border-radius: $radius-sm;
+  margin-right: $spacing-sm;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.97);
+  }
+}
+
+.dateItemActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.dateWeekday {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.dateItemActive .dateWeekday {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dateDay {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.dateItemActive .dateDay {
+  color: $color-text-white;
+}
+
+.slotSection {
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  margin-bottom: $spacing-md;
+}
+
+.slotLabel {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.resultCard {
+  margin: 0 $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.resultTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.resultInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.resultLabel {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  margin-right: $spacing-md;
+  min-width: 120rpx;
+}
+
+.resultValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.resultHint {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  margin-top: $spacing-md;
+  line-height: $line-height-normal;
+}
+
+.historySection {
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  margin-top: $spacing-md;
+}
+
+.historyTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  z-index: 100;
+}
+
+.confirmBtn {
+  flex: 1;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.confirmBtnDisabled {
+  background: $color-text-disabled;
+  opacity: 0.6;
+}
+
+.confirmBtnText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.emptyTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

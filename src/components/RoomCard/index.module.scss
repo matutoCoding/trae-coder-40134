@@ -1,0 +1,108 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.95;
+    transform: scale(0.99);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.name {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.statusTag {
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+}
+
+.statusFree {
+  background: rgba(0, 180, 42, 0.1);
+}
+
+.statusOccupied {
+  background: rgba(255, 125, 0, 0.1);
+}
+
+.statusMaintenance {
+  background: rgba(245, 63, 63, 0.1);
+}
+
+.statusText {
+  font-size: $font-size-xs;
+  white-space: nowrap;
+}
+
+.statusFree .statusText {
+  color: $color-free;
+}
+
+.statusOccupied .statusText {
+  color: $color-occupied;
+}
+
+.statusMaintenance .statusText {
+  color: $color-maintenance;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.infoText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.infoDivider {
+  margin: 0 $spacing-sm;
+  font-size: $font-size-sm;
+  color: $color-text-disabled;
+}
+
+.progressWrap {
+  display: flex;
+  align-items: center;
+}
+
+.progressBg {
+  flex: 1;
+  height: 8rpx;
+  background: $color-divider;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: 4rpx;
+  transition: width $transition-base;
+}
+
+.progressText {
+  margin-left: $spacing-sm;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  white-space: nowrap;
+}

@@ -1,0 +1,38 @@
+@use '@/styles/variables.scss' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+}
+
+.small {
+  padding: 2rpx 12rpx;
+}
+
+.medium {
+  padding: 4rpx 16rpx;
+}
+
+.large {
+  padding: 8rpx 24rpx;
+}
+
+.text {
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.small .text {
+  font-size: 20rpx;
+}
+
+.medium .text {
+  font-size: $font-size-xs;
+}
+
+.large .text {
+  font-size: $font-size-sm;
+}

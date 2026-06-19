@@ -1,0 +1,99 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.95;
+    transform: scale(0.99);
+  }
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.timeWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.time {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.date {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.statusTag {
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+}
+
+.statusPending {
+  background: rgba(255, 125, 0, 0.1);
+}
+
+.statusConfirmed {
+  background: rgba(0, 180, 42, 0.1);
+}
+
+.statusCancelled {
+  background: rgba(245, 63, 63, 0.1);
+}
+
+.statusCompleted {
+  background: rgba(108, 92, 231, 0.1);
+}
+
+.statusText {
+  font-size: $font-size-xs;
+  white-space: nowrap;
+}
+
+.statusPending .statusText {
+  color: $color-warning;
+}
+
+.statusConfirmed .statusText {
+  color: $color-success;
+}
+
+.statusCancelled .statusText {
+  color: $color-error;
+}
+
+.statusCompleted .statusText {
+  color: $color-primary;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.roomName {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.createdAt {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+}

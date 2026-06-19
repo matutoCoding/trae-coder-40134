@@ -1,0 +1,203 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #EDE7F6 0%, $color-bg-page 40%);
+  padding-bottom: 120rpx;
+}
+
+.header {
+  padding: $spacing-lg $spacing-lg $spacing-md;
+}
+
+.greeting {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.subGreeting {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.memberCard {
+  margin: 0 $spacing-lg $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 4rpx 20rpx rgba(108, 92, 231, 0.3);
+}
+
+.memberTop {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+  margin-right: $spacing-md;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.memberInfo {
+  flex: 1;
+}
+
+.memberName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+  margin-bottom: 4rpx;
+}
+
+.levelRow {
+  display: flex;
+  align-items: center;
+}
+
+.quotaSection {
+  margin-bottom: $spacing-sm;
+}
+
+.quotaRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.quotaLabel {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.quotaNumbers {
+  display: flex;
+  align-items: baseline;
+}
+
+.quotaUsed {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.quotaDivider {
+  margin: 0 4rpx;
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.quotaTotal {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.quotaProgressBg {
+  width: 100%;
+  height: 8rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.quotaProgressFill {
+  height: 100%;
+  background: $color-accent;
+  border-radius: 4rpx;
+}
+
+.section {
+  margin: 0 $spacing-lg $spacing-lg;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionMore {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.statsRow {
+  display: flex;
+  margin: 0 $spacing-lg $spacing-lg;
+}
+
+.statCard {
+  flex: 1;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: $spacing-md;
+}
+
+.statCard:last-child {
+  margin-right: 0;
+}
+
+.statValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-bottom: 4rpx;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.bookingAction {
+  margin: 0 $spacing-lg $spacing-lg;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-accent 0%, $color-accent-light 100%);
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(255, 107, 53, 0.3);
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.bookingActionText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.emptyTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
