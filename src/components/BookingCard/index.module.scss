@@ -61,6 +61,18 @@
   background: rgba(108, 92, 231, 0.1);
 }
 
+.statusWaitlist {
+  background: rgba(255, 200, 0, 0.12);
+}
+
+.statusConverted {
+  background: rgba(0, 180, 42, 0.1);
+}
+
+.statusExpired {
+  background: rgba(153, 153, 153, 0.12);
+}
+
 .statusText {
   font-size: $font-size-xs;
   white-space: nowrap;
@@ -80,6 +92,18 @@
 
 .statusCompleted .statusText {
   color: $color-primary;
+}
+
+.statusWaitlist .statusText {
+  color: #e6a817;
+}
+
+.statusConverted .statusText {
+  color: $color-success;
+}
+
+.statusExpired .statusText {
+  color: #999;
 }
 
 .bottom {

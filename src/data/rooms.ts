@@ -19,6 +19,9 @@ export const mockRooms: Room[] = [
     equipmentLevel: 'standard',
     status: 'active',
     baseSchedule: [...standardSchedule],
+    reservedSlots: [
+      { startTime: '12:00', endTime: '14:00', reason: 'system', label: '午间设备维护' },
+    ],
   },
   {
     id: 'R002',
@@ -27,6 +30,9 @@ export const mockRooms: Room[] = [
     equipmentLevel: 'professional',
     status: 'active',
     baseSchedule: [...standardSchedule],
+    reservedSlots: [
+      { startTime: '12:00', endTime: '14:00', reason: 'system', label: '午间设备维护' },
+    ],
   },
   {
     id: 'R003',
@@ -35,6 +41,10 @@ export const mockRooms: Room[] = [
     equipmentLevel: 'premium',
     status: 'active',
     baseSchedule: [...standardSchedule],
+    reservedSlots: [
+      { startTime: '12:00', endTime: '14:00', reason: 'system', label: '午间设备维护' },
+      { startTime: '17:00', endTime: '19:00', reason: 'system', label: '教师专用时段' },
+    ],
   },
   {
     id: 'R004',
@@ -51,6 +61,9 @@ export const mockRooms: Room[] = [
     equipmentLevel: 'professional',
     status: 'active',
     baseSchedule: [...standardSchedule],
+    reservedSlots: [
+      { startTime: '12:00', endTime: '14:00', reason: 'system', label: '午间设备维护' },
+    ],
   },
   {
     id: 'R006',
@@ -59,6 +72,10 @@ export const mockRooms: Room[] = [
     equipmentLevel: 'premium',
     status: 'active',
     baseSchedule: [...standardSchedule],
+    reservedSlots: [
+      { startTime: '12:00', endTime: '14:00', reason: 'system', label: '午间设备维护' },
+      { startTime: '17:00', endTime: '19:00', reason: 'unavailable', label: '团课专用' },
+    ],
   },
   {
     id: 'R007',
@@ -75,6 +92,9 @@ export const mockRooms: Room[] = [
     equipmentLevel: 'professional',
     status: 'active',
     baseSchedule: [...standardSchedule],
+    reservedSlots: [
+      { startTime: '12:00', endTime: '14:00', reason: 'system', label: '午间设备维护' },
+    ],
   },
   {
     id: 'R009',
@@ -91,5 +111,9 @@ export const mockRooms: Room[] = [
     equipmentLevel: 'premium',
     status: 'active',
     baseSchedule: [...standardSchedule],
+    reservedSlots: [
+      { startTime: '12:00', endTime: '14:00', reason: 'system', label: '午间设备维护' },
+      { startTime: '17:00', endTime: '19:00', reason: 'system', label: '教师专用时段' },
+    ],
   },
 ];

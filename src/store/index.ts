@@ -18,6 +18,9 @@ interface AppState {
   assessments: Assessment[];
   addBooking: (booking: Booking) => void;
   cancelBooking: (bookingId: string) => void;
+  addWaitlist: (booking: Booking) => void;
+  convertWaitlist: (bookingId: string, roomId: string, roomName: string) => void;
+  expireWaitlist: (date: string) => void;
   deductQuota: () => void;
   returnQuota: () => void;
   changeLevel: (newLevel: MemberLevel) => void;
@@ -39,10 +42,11 @@ export const useAppStore = create<AppState>((set) => ({
       const target = state.bookings.find(b => b.id === bookingId);
       if (!target || target.status === 'cancelled') return state;
 
-      const newUsed = Math.max(state.member.usedQuota - 1, 0);
-      const newRemaining = Math.min(state.member.weeklyQuota - newUsed, state.member.weeklyQuota);
+      const isWaitlist = target.status === 'waitlist';
+      const newUsed = isWaitlist ? state.member.usedQuota : Math.max(state.member.usedQuota - 1, 0);
+      const newRemaining = isWaitlist ? state.member.remainingQuota : Math.min(state.member.weeklyQuota - newUsed, state.member.weeklyQuota);
 
-      console.info('[Booking] 取消预约', { bookingId, room: target.roomName, time: target.startTime });
+      console.info('[Booking] 取消预约', { bookingId, room: target.roomName, time: target.startTime, wasWaitlist: isWaitlist });
 
       return {
         bookings: state.bookings.map((b) =>
@@ -55,6 +59,55 @@ export const useAppStore = create<AppState>((set) => ({
         },
       };
     }),
+
+  addWaitlist: (booking) =>
+    set((state) => {
+      const sameSlotWaitlists = state.bookings.filter(
+        b => b.date === booking.date && b.startTime === booking.startTime && b.status === 'waitlist'
+      );
+      const waitlistBooking: Booking = {
+        ...booking,
+        status: 'waitlist',
+        isWaitlist: true,
+        waitlistPosition: sameSlotWaitlists.length + 1,
+      };
+      return { bookings: [waitlistBooking, ...state.bookings] };
+    }),
+
+  convertWaitlist: (bookingId, roomId, roomName) =>
+    set((state) => {
+      const target = state.bookings.find(b => b.id === bookingId);
+      if (!target || target.status !== 'waitlist') return state;
+
+      return {
+        bookings: state.bookings.map((b) =>
+          b.id === bookingId
+            ? {
+                ...b,
+                status: 'waitlist-converted' as const,
+                roomId,
+                roomName,
+                allocatedRoom: roomName,
+                isWaitlist: false,
+              }
+            : b
+        ),
+        member: {
+          ...state.member,
+          usedQuota: state.member.usedQuota + 1,
+          remainingQuota: Math.max(state.member.weeklyQuota - (state.member.usedQuota + 1), 0),
+        },
+      };
+    }),
+
+  expireWaitlist: (date) =>
+    set((state) => ({
+      bookings: state.bookings.map((b) =>
+        b.status === 'waitlist' && b.date === date
+          ? { ...b, status: 'waitlist-expired' as const }
+          : b
+      ),
+    })),
 
   deductQuota: () =>
     set((state) => {

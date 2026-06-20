@@ -12,11 +12,26 @@
   margin-bottom: $spacing-md;
 }
 
+.dateHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
 .dateLabel {
   font-size: $font-size-md;
   font-weight: $font-weight-medium;
   color: $color-text-primary;
-  margin-bottom: $spacing-md;
+}
+
+.weekToggle {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  padding: 4rpx 12rpx;
+  background: rgba(108, 92, 231, 0.08);
+  border-radius: $radius-round;
 }
 
 .dateRow {
@@ -62,6 +77,134 @@
 
 .dateItemActive .dateDay {
   color: $color-text-white;
+}
+
+.weekViewSection {
+  margin: 0 $spacing-lg $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.weekViewTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.weekGrid {
+  width: 100%;
+  @include scroll-x-container;
+}
+
+.weekGridInner {
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.weekHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.weekHeaderEmpty {
+  width: 80rpx;
+  flex-shrink: 0;
+}
+
+.weekHeaderCell {
+  flex: 1;
+  min-width: 64rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-xs;
+}
+
+.weekHeaderWeekday {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.weekHeaderDay {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.weekRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rpx;
+}
+
+.weekRowLabel {
+  width: 80rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: $spacing-xs;
+}
+
+.weekRowTime {
+  font-size: 18rpx;
+  color: $color-text-tertiary;
+}
+
+.weekCell {
+  flex: 1;
+  min-width: 64rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid transparent;
+  border-radius: 4rpx;
+  margin: 0 2rpx;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+}
+
+.weekCellText {
+  font-size: 18rpx;
+  font-weight: $font-weight-medium;
+}
+
+.weekLegend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-border-light;
+}
+
+.weekLegendItem {
+  display: flex;
+  align-items: center;
+}
+
+.weekLegendDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  margin-right: 4rpx;
+}
+
+.weekLegendText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
 }
 
 .quotaWarning {
@@ -219,6 +362,28 @@
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-white;
+}
+
+.waitlistBtn {
+  flex: 1;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, #e6a817 0%, #ffd666 100%);
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.waitlistBtnText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: #6b4e00;
 }
 
 .emptyTip {

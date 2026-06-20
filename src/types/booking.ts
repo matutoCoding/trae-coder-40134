@@ -1,4 +1,4 @@
-export type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed';
+export type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'waitlist' | 'waitlist-converted' | 'waitlist-expired';
 
 export interface Booking {
   id: string;
@@ -12,6 +12,8 @@ export interface Booking {
   createdAt: string;
   allocatedRoom?: string;
   allocationReason?: string;
+  isWaitlist?: boolean;
+  waitlistPosition?: number;
 }
 
 export interface TimeSlot {
@@ -19,6 +21,7 @@ export interface TimeSlot {
   startTime: string;
   endTime: string;
   available: boolean;
+  isFull?: boolean;
   roomId?: string;
 }
 

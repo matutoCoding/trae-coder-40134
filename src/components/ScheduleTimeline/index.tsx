@@ -15,7 +15,8 @@ const getDotClass = (status: TimeBlock['status']) => {
     case 'booked-self': return styles.dotSelf;
     case 'booked-other': return styles.dotOther;
     case 'maintenance': return styles.dotMaintenance;
-    case 'unavailable': return styles.dotUnavailable;
+    case 'reserved-system': return styles.dotReservedSystem;
+    case 'reserved-unavailable': return styles.dotReservedUnavail;
     default: return styles.dotFree;
   }
 };
@@ -26,7 +27,8 @@ const getStatusClass = (status: TimeBlock['status']) => {
     case 'booked-self': return styles.statusSelf;
     case 'booked-other': return styles.statusOther;
     case 'maintenance': return styles.statusMaintenance;
-    case 'unavailable': return styles.statusUnavailable;
+    case 'reserved-system': return styles.statusReservedSystem;
+    case 'reserved-unavailable': return styles.statusReservedUnavail;
     default: return styles.statusFree;
   }
 };
@@ -45,18 +47,14 @@ const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedule }) => {
       {schedule.map((block, index) => (
         <View key={index} className={styles.block}>
           <View className={styles.dotWrap}>
-            <View
-              className={classnames(styles.dot, getDotClass(block.status)}
-            />
+            <View className={classnames(styles.dot, getDotClass(block.status))} />
             {index < schedule.length - 1 && <View className={styles.line} />}
           </View>
           <View className={styles.content}>
             <Text className={styles.timeRange}>
               {block.startTime}-{block.endTime}
             </Text>
-            <Text
-              className={classnames(styles.status, getStatusClass(block.status))}
-            >
+            <Text className={classnames(styles.status, getStatusClass(block.status))}>
               {getTimeBlockStatusText(block.status)}
             </Text>
           </View>

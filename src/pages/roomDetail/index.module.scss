@@ -185,8 +185,12 @@
   background: $color-error;
 }
 
-.dotUnavailable {
-  background: $color-text-tertiary;
+.dotReservedSystem {
+  background: #8c8c8c;
+}
+
+.dotReservedUnavail {
+  background: #bfbfbf;
 }
 
 .timelineLine {
@@ -211,8 +215,12 @@
   background: rgba(245, 63, 63, 0.2);
 }
 
-.lineUnavailable {
-  background: rgba(153, 153, 153, 0.2);
+.lineReservedSystem {
+  background: rgba(140, 140, 140, 0.2);
+}
+
+.lineReservedUnavail {
+  background: rgba(191, 191, 191, 0.2);
 }
 
 .timelineContent {
@@ -261,8 +269,18 @@
   color: $color-error;
 }
 
-.statusUnavailable {
+.statusReservedSystem {
+  color: #8c8c8c;
+}
+
+.statusReservedUnavail {
+  color: #bfbfbf;
+}
+
+.sourceLabel {
+  font-size: $font-size-xs;
   color: $color-text-tertiary;
+  margin-top: 4rpx;
 }
 
 .legendSection {

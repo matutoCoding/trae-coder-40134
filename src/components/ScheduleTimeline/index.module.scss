@@ -44,8 +44,12 @@
   background: $color-error;
 }
 
-.dotUnavailable {
-  background: $color-text-tertiary;
+.dotReservedSystem {
+  background: #8c8c8c;
+}
+
+.dotReservedUnavail {
+  background: #bfbfbf;
 }
 
 .line {
@@ -93,8 +97,12 @@
   color: $color-error;
 }
 
-.statusUnavailable {
-  color: $color-text-tertiary;
+.statusReservedSystem {
+  color: #8c8c8c;
+}
+
+.statusReservedUnavail {
+  color: #bfbfbf;
 }
 
 .empty {

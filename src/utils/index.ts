@@ -1,6 +1,7 @@
-import type { Room, TimeBlock, DaySchedule } from '@/types/room';
+import type { Room, TimeBlock, DaySchedule, ReservedSlot } from '@/types/room';
 import type { Booking, TimeSlot, AllocationResult } from '@/types/booking';
 import type { Member } from '@/types/member';
+import dayjs from 'dayjs';
 
 const SLOT_ORDER = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '19:00', '20:00', '21:00'];
 
@@ -22,33 +23,50 @@ export const generateTimeSlots = (): TimeSlot[] => {
 
 export const getDaySchedule = (room: Room, bookings: Booking[], date: string, memberId: string = 'M001'): DaySchedule => {
   const dayBookings = bookings.filter(
-    b => b.roomId === room.id && b.date === date && b.status !== 'cancelled'
+    b => b.roomId === room.id && b.date === date && b.status !== 'cancelled' && b.status !== 'waitlist-expired'
   );
+
+  const reservedMap = new Map<string, ReservedSlot>();
+  (room.reservedSlots || []).forEach(rs => {
+    reservedMap.set(rs.startTime, rs);
+  });
 
   const blocks: TimeBlock[] = room.baseSchedule.map(block => {
     if (room.status === 'maintenance') {
       return {
         ...block,
         status: 'maintenance' as const,
+        sourceLabel: '鼓房维修中',
+      };
+    }
+
+    const reserved = reservedMap.get(block.startTime);
+    if (reserved) {
+      return {
+        ...block,
+        status: reserved.reason === 'system' ? 'reserved-system' as const : 'reserved-unavailable' as const,
+        sourceLabel: reserved.label,
       };
     }
 
     const booking = dayBookings.find(b => b.startTime === block.startTime);
     if (booking) {
       const isSelf = booking.memberId === memberId;
+      const isWaitlist = booking.status === 'waitlist';
       return {
         ...block,
         status: isSelf ? 'booked-self' as const : 'booked-other' as const,
         bookingId: booking.id,
-        memberName: isSelf ? '我' : `学员${booking.memberId.slice(-2)}`,
+        memberName: isSelf ? (isWaitlist ? '我(候补)' : '我') : `学员${booking.memberId.slice(-2)}`,
+        sourceLabel: isWaitlist ? '候补占位' : undefined,
       };
     }
     return { ...block, status: 'free' as const };
   });
 
-  const availableBlocks = blocks.filter(b => b.status !== 'maintenance' && b.status !== 'unavailable');
-  const totalSlots = availableBlocks.length;
-  const bookedSlots = availableBlocks.filter(b => b.status === 'booked-self' || b.status === 'booked-other').length;
+  const countableBlocks = blocks.filter(b => b.status !== 'maintenance' && b.status !== 'reserved-system' && b.status !== 'reserved-unavailable');
+  const totalSlots = countableBlocks.length;
+  const bookedSlots = countableBlocks.filter(b => b.status === 'booked-self' || b.status === 'booked-other').length;
   const occupancyRate = totalSlots > 0 ? Math.round((bookedSlots / totalSlots) * 100) : 0;
 
   let dayStatus: DaySchedule['dayStatus'] = 'free';
@@ -58,6 +76,50 @@ export const getDaySchedule = (room: Room, bookings: Booking[], date: string, me
   else dayStatus = 'partial';
 
   return { date, blocks, occupancyRate, dayStatus };
+};
+
+export const isSlotFullyBooked = (rooms: Room[], bookings: Booking[], date: string, startTime: string, memberId: string = 'M001'): boolean => {
+  return rooms.every(room => {
+    if (room.status === 'maintenance') return true;
+    const schedule = getDaySchedule(room, bookings, date, memberId);
+    const block = schedule.blocks.find(b => b.startTime === startTime);
+    return !block || block.status !== 'free';
+  });
+};
+
+export const getSlotTension = (rooms: Room[], bookings: Booking[], date: string, startTime: string, memberId: string = 'M001'): number => {
+  const activeRooms = rooms.filter(r => r.status !== 'maintenance');
+  if (activeRooms.length === 0) return 100;
+  const freeCount = activeRooms.filter(room => {
+    const schedule = getDaySchedule(room, bookings, date, memberId);
+    const block = schedule.blocks.find(b => b.startTime === startTime);
+    return block?.status === 'free';
+  }).length;
+  return Math.round(((activeRooms.length - freeCount) / activeRooms.length) * 100);
+};
+
+export const getWeekOverview = (rooms: Room[], bookings: Booking[], memberId: string = 'M001'): { date: string; weekday: string; day: string; slots: { startTime: string; endTime: string; tension: number; fullyBooked: boolean }[] }[] => {
+  const result: { date: string; weekday: string; day: string; slots: { startTime: string; endTime: string; tension: number; fullyBooked: boolean }[] }[] = [];
+  for (let i = 0; i < 7; i++) {
+    const d = dayjs().add(i, 'day');
+    const date = d.format('YYYY-MM-DD');
+    const slots = generateTimeSlots().map(slot => {
+      const tension = getSlotTension(rooms, bookings, date, slot.startTime, memberId);
+      return {
+        startTime: slot.startTime,
+        endTime: slot.endTime,
+        tension,
+        fullyBooked: tension >= 100,
+      };
+    });
+    result.push({
+      date,
+      weekday: i === 0 ? '今天' : i === 1 ? '明天' : d.format('ddd'),
+      day: d.format('DD'),
+      slots,
+    });
+  }
+  return result;
 };
 
 const isSlotFree = (blocks: TimeBlock[], startTime: string): boolean => {
@@ -159,9 +221,9 @@ const calculateAllocationScore = (
     reasons.push(`该鼓房今日空闲不多(${freeCount}个)，优先填补`);
   }
 
-  const availableBlocks = blocks.filter(b => b.status !== 'maintenance' && b.status !== 'unavailable');
-  const occupancy = availableBlocks.length > 0
-    ? Math.round(((availableBlocks.length - freeCount) / availableBlocks.length) * 100)
+  const countableBlocks = blocks.filter(b => b.status !== 'maintenance' && b.status !== 'reserved-system' && b.status !== 'reserved-unavailable');
+  const occupancy = countableBlocks.length > 0
+    ? Math.round(((countableBlocks.length - freeCount) / countableBlocks.length) * 100)
     : 0;
   if (occupancy < 30) {
     score += 20;
@@ -218,6 +280,9 @@ export const getBookingStatusText = (status: Booking['status']): string => {
     confirmed: '已确认',
     cancelled: '已取消',
     completed: '已完成',
+    waitlist: '候补中',
+    'waitlist-converted': '已转正',
+    'waitlist-expired': '已失效',
   };
   return map[status];
 };
@@ -254,7 +319,8 @@ export const getTimeBlockStatusText = (status: TimeBlock['status']): string => {
     'booked-self': '我的预约',
     'booked-other': '已预约',
     maintenance: '维修中',
-    unavailable: '不可预约',
+    'reserved-system': '系统保留',
+    'reserved-unavailable': '不可预约',
   };
   return map[status];
 };

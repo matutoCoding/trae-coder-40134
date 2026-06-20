@@ -14,7 +14,8 @@ const getDotClass = (status: TimeBlock['status']) => {
     case 'booked-self': return 'dotSelf';
     case 'booked-other': return 'dotOther';
     case 'maintenance': return 'dotMaintenance';
-    case 'unavailable': return 'dotUnavailable';
+    case 'reserved-system': return 'dotReservedSystem';
+    case 'reserved-unavailable': return 'dotReservedUnavail';
     default: return 'dotFree';
   }
 };
@@ -25,7 +26,8 @@ const getLineClass = (status: TimeBlock['status']) => {
     case 'booked-self': return 'lineSelf';
     case 'booked-other': return 'lineOther';
     case 'maintenance': return 'lineMaintenance';
-    case 'unavailable': return 'lineUnavailable';
+    case 'reserved-system': return 'lineReservedSystem';
+    case 'reserved-unavailable': return 'lineReservedUnavail';
     default: return 'lineFree';
   }
 };
@@ -36,7 +38,8 @@ const getStatusClass = (status: TimeBlock['status']) => {
     case 'booked-self': return 'statusSelf';
     case 'booked-other': return 'statusOther';
     case 'maintenance': return 'statusMaintenance';
-    case 'unavailable': return 'statusUnavailable';
+    case 'reserved-system': return 'statusReservedSystem';
+    case 'reserved-unavailable': return 'statusReservedUnavail';
     default: return 'statusFree';
   }
 };
@@ -85,8 +88,6 @@ const RoomDetailPage: React.FC = () => {
       </View>
     );
   }
-
-  const isMaintenance = room.status === 'maintenance';
 
   return (
     <View className={styles.page}>
@@ -156,6 +157,14 @@ const RoomDetailPage: React.FC = () => {
           <Text className={styles.legendText}>空闲</Text>
         </View>
         <View className={styles.legendItem}>
+          <View className={classnames(styles.legendDot, styles.dotReservedSystem)} />
+          <Text className={styles.legendText}>系统保留</Text>
+        </View>
+        <View className={styles.legendItem}>
+          <View className={classnames(styles.legendDot, styles.dotReservedUnavail)} />
+          <Text className={styles.legendText}>不可预约</Text>
+        </View>
+        <View className={styles.legendItem}>
           <View className={classnames(styles.legendDot, styles.dotMaintenance)} />
           <Text className={styles.legendText}>维修</Text>
         </View>
@@ -204,6 +213,11 @@ const RoomDetailPage: React.FC = () => {
                       👤 {block.memberName}
                     </Text>
                   )}
+                  {(block.status === 'reserved-system' || block.status === 'reserved-unavailable' || block.status === 'maintenance') && block.sourceLabel && (
+                    <Text className={styles.sourceLabel}>
+                      📋 {block.sourceLabel}
+                    </Text>
+                  )}
                 </View>
               </View>
             ))}
@@ -214,7 +228,7 @@ const RoomDetailPage: React.FC = () => {
       <View className={styles.tipCard}>
         <Text className={styles.tipTitle}>💡 排期说明</Text>
         <Text className={styles.tipText}>
-          系统会根据预约情况自动更新排期，预约成功后会立即显示在对应时段中。取消预约后时段也会实时释放。
+          系统保留时段为固定不可约时段（如午间维护、教师专用）。不可预约时段为团课等专用时段。预约成功后会立即显示在对应时段中，取消后实时释放。
         </Text>
       </View>
     </View>

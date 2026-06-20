@@ -16,6 +16,10 @@
   align-items: center;
 }
 
+.statusCardWaitlist {
+  background: linear-gradient(135deg, #e6a817 0%, #ffd666 100%);
+}
+
 .statusBadge {
   display: inline-block;
   padding: 6rpx 20rpx;
@@ -40,6 +44,27 @@
 
 .statuscancelled {
   background: rgba(153, 153, 153, 0.5);
+}
+
+.statusWaitlist {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.statusConverted {
+  background: rgba(0, 180, 42, 0.35);
+}
+
+.statusExpired {
+  background: rgba(153, 153, 153, 0.5);
+}
+
+.waitlistPosition {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: $spacing-xs;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
 }
 
 .statusRoom {
