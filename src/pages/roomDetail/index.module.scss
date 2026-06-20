@@ -3,21 +3,282 @@
 .page {
   min-height: 100vh;
   background: $color-bg-page;
+  padding-bottom: 60rpx;
+}
+
+.header {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $spacing-lg;
+}
+
+.roomName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  margin-bottom: $spacing-xs;
+}
+
+.roomMeta {
+  display: flex;
+  align-items: center;
+}
+
+.metaText {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.metaDivider {
+  margin: 0 $spacing-sm;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: $font-size-sm;
+}
+
+.dateSection {
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  margin: -$spacing-md $spacing-lg $spacing-md;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+  position: relative;
+  z-index: 10;
+}
+
+.sectionLabel {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.dateRow {
+  display: flex;
+  @include scroll-x-container;
+}
+
+.dateItem {
+  @include scroll-x-item(120rpx);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-sm $spacing-xs;
+  border-radius: $radius-sm;
+  margin-right: $spacing-sm;
+  transition: all $transition-base;
+  background: $color-bg-page;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.97);
+  }
+}
+
+.dateItemActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.dateWeekday {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.dateItemActive .dateWeekday {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dateDay {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.dateItemActive .dateDay {
+  color: $color-text-white;
+}
+
+.statsCard {
+  display: flex;
+  margin: 0 $spacing-lg $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.statItem {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 $spacing-lg;
 }
 
-.title {
-  font-size: $font-size-xxl;
+.statValue {
+  font-size: $font-size-xl;
   font-weight: $font-weight-bold;
   color: $color-text-primary;
-  margin-bottom: $spacing-md;
+  margin-bottom: 4rpx;
 }
 
-.hint {
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.statDivider {
+  width: 1rpx;
+  background: $color-divider;
+  margin: $spacing-xs 0;
+}
+
+.scheduleSection {
+  margin: 0 $spacing-lg $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.timelineItem {
+  display: flex;
+  align-items: stretch;
+  min-height: 80rpx;
+}
+
+.timelineDotWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.timelineDot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 10rpx;
+}
+
+.dotFree {
+  background: $color-free;
+}
+
+.dotBooked {
+  background: $color-occupied;
+}
+
+.timelineLine {
+  width: 2rpx;
+  flex: 1;
+  margin-top: 8rpx;
+}
+
+.lineFree {
+  background: rgba(0, 180, 42, 0.2);
+}
+
+.lineBooked {
+  background: rgba(255, 125, 0, 0.2);
+}
+
+.timelineContent {
+  flex: 1;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.timelineItem:last-child .timelineContent {
+  border-bottom: none;
+}
+
+.timelineInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.timeRange {
   font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.timelineStatus {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.statusFree {
+  color: $color-free;
+}
+
+.statusBooked {
+  color: $color-occupied;
+}
+
+.memberName {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.maintenanceTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl 0;
+  background: rgba(245, 63, 63, 0.04);
+  border-radius: $radius-sm;
+}
+
+.maintenanceText {
+  font-size: $font-size-md;
+  color: $color-error;
+}
+
+.tipCard {
+  margin: 0 $spacing-lg $spacing-md;
+  background: rgba(108, 92, 231, 0.05);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  border: 2rpx solid rgba(108, 92, 231, 0.15);
+}
+
+.tipTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.tipText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
   color: $color-text-tertiary;
 }

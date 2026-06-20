@@ -7,15 +7,24 @@ import styles from './index.module.scss';
 
 interface BookingCardProps {
   booking: Booking;
+  showCancel?: boolean;
   onClick?: (bookingId: string) => void;
+  onCancel?: (bookingId: string) => void;
 }
 
-const BookingCard: React.FC<BookingCardProps> = ({ booking, onClick }) => {
+const BookingCard: React.FC<BookingCardProps> = ({ booking, showCancel = false, onClick, onCancel }) => {
   const statusClass = {
     pending: styles.statusPending,
     confirmed: styles.statusConfirmed,
     cancelled: styles.statusCancelled,
     completed: styles.statusCompleted,
+  };
+
+  const canCancel = showCancel && booking.status === 'confirmed';
+
+  const handleCancel = (e: any) => {
+    e?.stopPropagation?.();
+    onCancel?.(booking.id);
   };
 
   return (
@@ -30,8 +39,15 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onClick }) => {
         </View>
       </View>
       <View className={styles.bottom}>
-        <Text className={styles.roomName}>{booking.allocatedRoom || '待分配'}</Text>
-        <Text className={styles.createdAt}>预约于 {booking.createdAt}</Text>
+        <View className={styles.bottomLeft}>
+          <Text className={styles.roomName}>{booking.allocatedRoom || '待分配'}</Text>
+          <Text className={styles.createdAt}>预约于 {booking.createdAt}</Text>
+        </View>
+        {canCancel && (
+          <View className={styles.cancelBtn} onClick={handleCancel}>
+            <Text className={styles.cancelBtnText}>取消</Text>
+          </View>
+        )}
       </View>
     </View>
   );

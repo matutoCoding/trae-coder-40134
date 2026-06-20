@@ -1,22 +1,33 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import dayjs from 'dayjs';
 import { useAppStore } from '@/store';
 import LevelBadge from '@/components/LevelBadge';
 import BookingCard from '@/components/BookingCard';
+import { getDaySchedule } from '@/utils';
 import styles from './index.module.scss';
 
 const HomePage: React.FC = () => {
   const { member, bookings, rooms } = useAppStore();
 
+  const today = dayjs().format('YYYY-MM-DD');
+
   const myBookings = bookings
     .filter(b => b.memberId === member.id)
     .slice(0, 3);
 
-  const freeRoomCount = rooms.filter(r => r.status === 'free').length;
   const todayBookings = myBookings.filter(
-    b => b.date === '2026-06-20' && b.status === 'confirmed'
+    b => b.date === today && b.status === 'confirmed'
   );
+
+  const freeRoomCount = useMemo(() => {
+    return rooms.filter(room => {
+      if (room.status === 'maintenance') return false;
+      const schedule = getDaySchedule(room, bookings, today);
+      return schedule.dayStatus === 'free';
+    }).length;
+  }, [rooms, bookings, today]);
 
   const quotaPercent = member.weeklyQuota > 0
     ? Math.min((member.usedQuota / member.weeklyQuota) * 100, 100)

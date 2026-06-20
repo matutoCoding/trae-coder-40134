@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Room, TimeBlock } from '@/types/room';
+import type { Room } from '@/types/room';
 import type { Booking } from '@/types/booking';
 import type { Member, MemberLevel, LevelChangeRecord } from '@/types/member';
 import type { Assessment } from '@/types/assessment';
@@ -19,7 +19,7 @@ interface AppState {
   addBooking: (booking: Booking) => void;
   cancelBooking: (bookingId: string) => void;
   deductQuota: () => void;
-  updateRoomSchedule: (roomId: string, startTime: string, bookingId: string) => void;
+  returnQuota: () => void;
   changeLevel: (newLevel: MemberLevel) => void;
   addAssessment: (assessment: Assessment) => void;
 }
@@ -35,11 +35,26 @@ export const useAppStore = create<AppState>((set) => ({
     set((state) => ({ bookings: [booking, ...state.bookings] })),
 
   cancelBooking: (bookingId) =>
-    set((state) => ({
-      bookings: state.bookings.map((b) =>
-        b.id === bookingId ? { ...b, status: 'cancelled' as const } : b
-      ),
-    })),
+    set((state) => {
+      const target = state.bookings.find(b => b.id === bookingId);
+      if (!target || target.status === 'cancelled') return state;
+
+      const newUsed = Math.max(state.member.usedQuota - 1, 0);
+      const newRemaining = Math.min(state.member.weeklyQuota - newUsed, state.member.weeklyQuota);
+
+      console.info('[Booking] 取消预约', { bookingId, room: target.roomName, time: target.startTime });
+
+      return {
+        bookings: state.bookings.map((b) =>
+          b.id === bookingId ? { ...b, status: 'cancelled' as const } : b
+        ),
+        member: {
+          ...state.member,
+          usedQuota: newUsed,
+          remainingQuota: newRemaining,
+        },
+      };
+    }),
 
   deductQuota: () =>
     set((state) => {
@@ -55,22 +70,17 @@ export const useAppStore = create<AppState>((set) => ({
       };
     }),
 
-  updateRoomSchedule: (roomId, startTime, bookingId) =>
+  returnQuota: () =>
     set((state) => {
-      const newRooms = state.rooms.map((room) => {
-        if (room.id !== roomId) return room;
-        const newSchedule = room.todaySchedule.map((block: TimeBlock) =>
-          block.startTime === startTime
-            ? { ...block, status: 'booked' as const, bookingId }
-            : block
-        );
-        const totalSlots = newSchedule.length;
-        const bookedSlots = newSchedule.filter((b: TimeBlock) => b.status === 'booked').length;
-        const newRate = totalSlots > 0 ? Math.round((bookedSlots / totalSlots) * 100) : 0;
-        const newStatus: Room['status'] = newRate >= 100 ? 'occupied' : 'free';
-        return { ...room, todaySchedule: newSchedule, occupancyRate: newRate, status: newStatus };
-      });
-      return { rooms: newRooms };
+      const newUsed = Math.max(state.member.usedQuota - 1, 0);
+      const newRemaining = Math.min(state.member.weeklyQuota - newUsed, state.member.weeklyQuota);
+      return {
+        member: {
+          ...state.member,
+          usedQuota: newUsed,
+          remainingQuota: newRemaining,
+        },
+      };
     }),
 
   changeLevel: (newLevel) =>

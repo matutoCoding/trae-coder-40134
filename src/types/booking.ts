@@ -11,6 +11,7 @@ export interface Booking {
   status: BookingStatus;
   createdAt: string;
   allocatedRoom?: string;
+  allocationReason?: string;
 }
 
 export interface TimeSlot {

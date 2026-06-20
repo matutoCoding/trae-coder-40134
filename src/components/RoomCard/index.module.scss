@@ -38,8 +38,12 @@
   background: rgba(0, 180, 42, 0.1);
 }
 
-.statusOccupied {
+.statusPartial {
   background: rgba(255, 125, 0, 0.1);
+}
+
+.statusFull {
+  background: rgba(245, 63, 63, 0.1);
 }
 
 .statusMaintenance {
@@ -55,8 +59,12 @@
   color: $color-free;
 }
 
-.statusOccupied .statusText {
+.statusPartial .statusText {
   color: $color-occupied;
+}
+
+.statusFull .statusText {
+  color: $color-maintenance;
 }
 
 .statusMaintenance .statusText {

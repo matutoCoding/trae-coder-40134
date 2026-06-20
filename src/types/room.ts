@@ -6,9 +6,8 @@ export interface Room {
   name: string;
   floor: number;
   equipmentLevel: EquipmentLevel;
-  status: RoomStatus;
-  todaySchedule: TimeBlock[];
-  occupancyRate: number;
+  status: 'active' | 'maintenance';
+  baseSchedule: TimeBlock[];
 }
 
 export interface TimeBlock {
@@ -16,4 +15,12 @@ export interface TimeBlock {
   endTime: string;
   status: 'free' | 'booked';
   bookingId?: string;
+  memberName?: string;
+}
+
+export interface DaySchedule {
+  date: string;
+  blocks: TimeBlock[];
+  occupancyRate: number;
+  dayStatus: 'free' | 'partial' | 'full';
 }

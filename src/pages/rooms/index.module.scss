@@ -6,6 +6,64 @@
   padding-bottom: 120rpx;
 }
 
+.dateSection {
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  margin-bottom: $spacing-md;
+}
+
+.dateLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+}
+
+.dateRow {
+  display: flex;
+  @include scroll-x-container;
+}
+
+.dateItem {
+  @include scroll-x-item(120rpx);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-sm $spacing-xs;
+  border-radius: $radius-sm;
+  margin-right: $spacing-sm;
+  transition: all $transition-base;
+  background: $color-bg-page;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.97);
+  }
+}
+
+.dateItemActive {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.dateWeekday {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.dateItemActive .dateWeekday {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dateDay {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.dateItemActive .dateDay {
+  color: $color-text-white;
+}
+
 .filterSection {
   padding: $spacing-lg;
   background: $color-bg-card;
@@ -16,20 +74,29 @@
   font-size: $font-size-sm;
   color: $color-text-tertiary;
   margin-bottom: $spacing-sm;
+  display: block;
 }
 
 .filterRow {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  margin-bottom: $spacing-md;
+  @include scroll-x-container;
+}
+
+.filterRow:last-child {
+  margin-bottom: 0;
 }
 
 .filterTag {
+  @include scroll-x-item(auto);
+  display: inline-flex;
   padding: 8rpx 24rpx;
   border-radius: $radius-round;
   background: $color-tag-bg;
   margin-right: $spacing-sm;
-  margin-bottom: $spacing-sm;
   transition: all $transition-base;
+  flex-shrink: 0;
 
   &:active {
     opacity: 0.9;
@@ -60,12 +127,12 @@
   flex: 1;
   background: $color-bg-card;
   border-radius: $radius-md;
-  padding: $spacing-md;
+  padding: $spacing-md $spacing-xs;
   box-shadow: $shadow-card;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: $spacing-md;
+  margin-right: $spacing-sm;
 }
 
 .overviewCard:last-child {
@@ -73,7 +140,7 @@
 }
 
 .overviewValue {
-  font-size: $font-size-xxl;
+  font-size: $font-size-xl;
   font-weight: $font-weight-bold;
   margin-bottom: 4rpx;
 }
@@ -82,12 +149,16 @@
   color: $color-free;
 }
 
-.overviewValueOccupied {
+.overviewValuePartial {
   color: $color-occupied;
 }
 
-.overviewValueRepair {
+.overviewValueFull {
   color: $color-maintenance;
+}
+
+.overviewValueRepair {
+  color: $color-error;
 }
 
 .overviewLabel {

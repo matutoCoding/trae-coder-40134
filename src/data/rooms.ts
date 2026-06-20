@@ -6,9 +6,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 A1',
     floor: 1,
     equipmentLevel: 'standard',
-    status: 'free',
-    occupancyRate: 45,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'booked' },
       { startTime: '10:00', endTime: '11:00', status: 'free' },
       { startTime: '11:00', endTime: '12:00', status: 'free' },
@@ -24,9 +23,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 A2',
     floor: 1,
     equipmentLevel: 'professional',
-    status: 'occupied',
-    occupancyRate: 75,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'booked' },
       { startTime: '10:00', endTime: '11:00', status: 'booked' },
       { startTime: '11:00', endTime: '12:00', status: 'booked' },
@@ -42,9 +40,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 B1',
     floor: 2,
     equipmentLevel: 'premium',
-    status: 'free',
-    occupancyRate: 30,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'free' },
       { startTime: '10:00', endTime: '11:00', status: 'free' },
       { startTime: '11:00', endTime: '12:00', status: 'booked' },
@@ -61,17 +58,15 @@ export const mockRooms: Room[] = [
     floor: 2,
     equipmentLevel: 'standard',
     status: 'maintenance',
-    occupancyRate: 0,
-    todaySchedule: [],
+    baseSchedule: [],
   },
   {
     id: 'R005',
     name: '鼓房 C1',
     floor: 3,
     equipmentLevel: 'professional',
-    status: 'free',
-    occupancyRate: 55,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'booked' },
       { startTime: '10:00', endTime: '11:00', status: 'booked' },
       { startTime: '11:00', endTime: '12:00', status: 'free' },
@@ -87,9 +82,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 C2',
     floor: 3,
     equipmentLevel: 'premium',
-    status: 'occupied',
-    occupancyRate: 85,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'booked' },
       { startTime: '10:00', endTime: '11:00', status: 'booked' },
       { startTime: '11:00', endTime: '12:00', status: 'booked' },
@@ -105,9 +99,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 D1',
     floor: 1,
     equipmentLevel: 'standard',
-    status: 'free',
-    occupancyRate: 20,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'free' },
       { startTime: '10:00', endTime: '11:00', status: 'free' },
       { startTime: '11:00', endTime: '12:00', status: 'free' },
@@ -123,9 +116,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 D2',
     floor: 2,
     equipmentLevel: 'professional',
-    status: 'free',
-    occupancyRate: 60,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'booked' },
       { startTime: '10:00', endTime: '11:00', status: 'booked' },
       { startTime: '11:00', endTime: '12:00', status: 'booked' },
@@ -141,9 +133,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 E1',
     floor: 3,
     equipmentLevel: 'standard',
-    status: 'free',
-    occupancyRate: 35,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'free' },
       { startTime: '10:00', endTime: '11:00', status: 'booked' },
       { startTime: '11:00', endTime: '12:00', status: 'free' },
@@ -159,9 +150,8 @@ export const mockRooms: Room[] = [
     name: '鼓房 E2',
     floor: 1,
     equipmentLevel: 'premium',
-    status: 'occupied',
-    occupancyRate: 70,
-    todaySchedule: [
+    status: 'active',
+    baseSchedule: [
       { startTime: '09:00', endTime: '10:00', status: 'booked' },
       { startTime: '10:00', endTime: '11:00', status: 'booked' },
       { startTime: '11:00', endTime: '12:00', status: 'free' },

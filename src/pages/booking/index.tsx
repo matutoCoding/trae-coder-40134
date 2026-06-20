@@ -6,12 +6,17 @@ import dayjs from 'dayjs';
 import { useAppStore } from '@/store';
 import TimeSlotPicker from '@/components/TimeSlotPicker';
 import BookingCard from '@/components/BookingCard';
-import { generateTimeSlots, allocateRoom, getBookingsForMember } from '@/utils';
+import {
+  generateTimeSlots,
+  allocateRoom,
+  getBookingsForMember,
+  getDaySchedule,
+} from '@/utils';
 import type { TimeSlot, Booking, AllocationResult } from '@/types/booking';
 import styles from './index.module.scss';
 
 const BookingPage: React.FC = () => {
-  const { rooms, bookings, member, addBooking, deductQuota, updateRoomSchedule } = useAppStore();
+  const { rooms, bookings, member, addBooking, deductQuota, cancelBooking } = useAppStore();
   const [selectedDate, setSelectedDate] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [allocationResult, setAllocationResult] = useState<AllocationResult | null>(null);
@@ -29,21 +34,23 @@ const BookingPage: React.FC = () => {
     return result;
   }, []);
 
+  const currentDate = dates[selectedDate]?.fullDate || '';
+
   const timeSlots: TimeSlot[] = useMemo(() => {
     const baseSlots = generateTimeSlots();
-    const dateStr = dates[selectedDate]?.fullDate;
-    const existingBookings = getBookingsForMember(bookings, member.id)
-      .filter(b => b.date === dateStr && b.status !== 'cancelled');
+    const myBookings = getBookingsForMember(bookings, member.id)
+      .filter(b => b.date === currentDate && b.status !== 'cancelled');
 
     return baseSlots.map(slot => {
-      const isBooked = existingBookings.some(b => b.startTime === slot.startTime);
-      const hasFreeRoom = rooms.some(
-        r => r.status !== 'maintenance' &&
-        r.todaySchedule.some(tb => tb.startTime === slot.startTime && tb.status === 'free')
-      );
-      return { ...slot, available: !isBooked && hasFreeRoom };
+      const isMyBooked = myBookings.some(b => b.startTime === slot.startTime);
+      const hasFreeRoom = rooms.some(room => {
+        if (room.status === 'maintenance') return false;
+        const sched = getDaySchedule(room, bookings, currentDate);
+        return sched.blocks.some(b => b.startTime === slot.startTime && b.status === 'free');
+      });
+      return { ...slot, available: !isMyBooked && hasFreeRoom };
     });
-  }, [selectedDate, bookings, member.id, dates, rooms]);
+  }, [selectedDate, bookings, member.id, currentDate, rooms]);
 
   const handleSelectDate = (index: number) => {
     setSelectedDate(index);
@@ -57,7 +64,7 @@ const BookingPage: React.FC = () => {
       return;
     }
     setSelectedSlot(slot.startTime);
-    const result = allocateRoom(rooms, slot.startTime);
+    const result = allocateRoom(rooms, bookings, currentDate, slot.startTime);
     setAllocationResult(result);
   };
 
@@ -68,7 +75,6 @@ const BookingPage: React.FC = () => {
       return;
     }
 
-    const dateStr = dates[selectedDate]?.fullDate;
     const bookingId = `B${Date.now()}`;
     const room = allocationResult.room;
     const newBooking: Booking = {
@@ -76,28 +82,55 @@ const BookingPage: React.FC = () => {
       memberId: member.id,
       roomId: room.id,
       roomName: room.name,
-      date: dateStr,
+      date: currentDate,
       startTime: selectedSlot,
       endTime: `${String(parseInt(selectedSlot) + 1).padStart(2, '0')}:00`,
       status: 'confirmed',
       createdAt: dayjs().format('YYYY-MM-DD HH:mm'),
       allocatedRoom: room.name,
+      allocationReason: allocationResult.reasons.join('；'),
     };
 
     addBooking(newBooking);
     deductQuota();
-    updateRoomSchedule(room.id, selectedSlot, bookingId);
 
-    console.info('[Booking] 预约成功', { booking: newBooking, roomId: room.id });
+    console.info('[Booking] 预约成功', {
+      date: currentDate,
+      slot: selectedSlot,
+      room: room.name,
+      reasons: allocationResult.reasons,
+    });
 
     Taro.showToast({ title: '预约成功', icon: 'success' });
     setSelectedSlot(null);
     setAllocationResult(null);
   };
 
+  const handleCancelBooking = (bookingId: string) => {
+    Taro.showModal({
+      title: '取消预约',
+      content: '确定要取消这个预约吗？取消后额度将退回。',
+      confirmText: '确定取消',
+      cancelText: '再想想',
+      confirmColor: '#f53f3f',
+      success: (res) => {
+        if (res.confirm) {
+          cancelBooking(bookingId);
+          Taro.showToast({ title: '已取消，额度已退回', icon: 'success' });
+          setSelectedSlot(null);
+          setAllocationResult(null);
+        }
+      },
+    });
+  };
+
   const myBookings = getBookingsForMember(bookings, member.id)
     .filter(b => b.status !== 'cancelled')
-    .slice(0, 5);
+    .sort((a, b) => {
+      if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+      return a.startTime < b.startTime ? -1 : 1;
+    })
+    .slice(0, 10);
 
   const canConfirm = selectedSlot && allocationResult && member.remainingQuota > 0;
 
@@ -159,7 +192,7 @@ const BookingPage: React.FC = () => {
           </View>
           {allocationResult.reasons.length > 0 && (
             <View className={styles.reasonSection}>
-              <Text className={styles.reasonTitle}>💡 为什么选择{allocationResult.room.name}：</Text>
+              <Text className={styles.reasonTitle}>💡 排班助手：为什么选{allocationResult.room.name}</Text>
               {allocationResult.reasons.map((reason, i) => (
                 <Text key={i} className={styles.reasonItem}>· {reason}</Text>
               ))}
@@ -179,7 +212,12 @@ const BookingPage: React.FC = () => {
         <Text className={styles.historyTitle}>我的预约</Text>
         {myBookings.length > 0 ? (
           myBookings.map(booking => (
-            <BookingCard key={booking.id} booking={booking} />
+            <BookingCard
+              key={booking.id}
+              booking={booking}
+              showCancel
+              onCancel={handleCancelBooking}
+            />
           ))
         ) : (
           <View className={styles.emptyTip}>
