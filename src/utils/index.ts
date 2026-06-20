@@ -20,39 +20,40 @@ export const generateTimeSlots = (): TimeSlot[] => {
   return slots;
 };
 
-export const getDaySchedule = (room: Room, bookings: Booking[], date: string): DaySchedule => {
-  if (room.status === 'maintenance') {
-    return {
-      date,
-      blocks: [],
-      occupancyRate: 100,
-      dayStatus: 'full',
-    };
-  }
-
+export const getDaySchedule = (room: Room, bookings: Booking[], date: string, memberId: string = 'M001'): DaySchedule => {
   const dayBookings = bookings.filter(
     b => b.roomId === room.id && b.date === date && b.status !== 'cancelled'
   );
 
   const blocks: TimeBlock[] = room.baseSchedule.map(block => {
-    const booking = dayBookings.find(b => b.startTime === block.startTime);
-    if (booking) {
+    if (room.status === 'maintenance') {
       return {
         ...block,
-        status: 'booked' as const,
-        bookingId: booking.id,
-        memberName: booking.memberId === 'M001' ? '我' : `学员${booking.id.slice(-2)}`,
+        status: 'maintenance' as const,
       };
     }
-    return { ...block };
+
+    const booking = dayBookings.find(b => b.startTime === block.startTime);
+    if (booking) {
+      const isSelf = booking.memberId === memberId;
+      return {
+        ...block,
+        status: isSelf ? 'booked-self' as const : 'booked-other' as const,
+        bookingId: booking.id,
+        memberName: isSelf ? '我' : `学员${booking.memberId.slice(-2)}`,
+      };
+    }
+    return { ...block, status: 'free' as const };
   });
 
-  const totalSlots = blocks.length;
-  const bookedSlots = blocks.filter(b => b.status === 'booked').length;
+  const availableBlocks = blocks.filter(b => b.status !== 'maintenance' && b.status !== 'unavailable');
+  const totalSlots = availableBlocks.length;
+  const bookedSlots = availableBlocks.filter(b => b.status === 'booked-self' || b.status === 'booked-other').length;
   const occupancyRate = totalSlots > 0 ? Math.round((bookedSlots / totalSlots) * 100) : 0;
 
   let dayStatus: DaySchedule['dayStatus'] = 'free';
-  if (bookedSlots === 0) dayStatus = 'free';
+  if (room.status === 'maintenance') dayStatus = 'full';
+  else if (bookedSlots === 0) dayStatus = 'free';
   else if (bookedSlots >= totalSlots) dayStatus = 'full';
   else dayStatus = 'partial';
 
@@ -158,7 +159,10 @@ const calculateAllocationScore = (
     reasons.push(`该鼓房今日空闲不多(${freeCount}个)，优先填补`);
   }
 
-  const occupancy = Math.round(((blocks.length - freeCount) / blocks.length) * 100);
+  const availableBlocks = blocks.filter(b => b.status !== 'maintenance' && b.status !== 'unavailable');
+  const occupancy = availableBlocks.length > 0
+    ? Math.round(((availableBlocks.length - freeCount) / availableBlocks.length) * 100)
+    : 0;
   if (occupancy < 30) {
     score += 20;
     reasons.push(`占用率仅${occupancy}%，负载较轻`);
@@ -178,18 +182,19 @@ export const allocateRoom = (
   rooms: Room[],
   bookings: Booking[],
   date: string,
-  timeSlot: string
+  timeSlot: string,
+  memberId: string = 'M001'
 ): AllocationResult | null => {
   const availableRooms = rooms.filter(r => {
     if (r.status === 'maintenance') return false;
-    const schedule = getDaySchedule(r, bookings, date);
+    const schedule = getDaySchedule(r, bookings, date, memberId);
     return isSlotFree(schedule.blocks, timeSlot);
   });
 
   if (availableRooms.length === 0) return null;
 
   const scored = availableRooms.map(room => {
-    const schedule = getDaySchedule(room, bookings, date);
+    const schedule = getDaySchedule(room, bookings, date, memberId);
     const { score, reasons } = calculateAllocationScore(room, schedule.blocks, timeSlot);
     return { room, score, reasons };
   });
@@ -241,6 +246,17 @@ export const getEquipmentLevelText = (level: Room['equipmentLevel']): string => 
     premium: '旗舰',
   };
   return map[level];
+};
+
+export const getTimeBlockStatusText = (status: TimeBlock['status']): string => {
+  const map: Record<TimeBlock['status'], string> = {
+    free: '空闲',
+    'booked-self': '我的预约',
+    'booked-other': '已预约',
+    maintenance: '维修中',
+    unavailable: '不可预约',
+  };
+  return map[status];
 };
 
 export const getAssessmentStatusText = (status: string): string => {

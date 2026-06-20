@@ -24,10 +24,10 @@ const HomePage: React.FC = () => {
   const freeRoomCount = useMemo(() => {
     return rooms.filter(room => {
       if (room.status === 'maintenance') return false;
-      const schedule = getDaySchedule(room, bookings, today);
+      const schedule = getDaySchedule(room, bookings, today, member.id);
       return schedule.dayStatus === 'free';
     }).length;
-  }, [rooms, bookings, today]);
+  }, [rooms, bookings, today, member.id]);
 
   const quotaPercent = member.weeklyQuota > 0
     ? Math.min((member.usedQuota / member.weeklyQuota) * 100, 100)

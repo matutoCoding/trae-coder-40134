@@ -26,6 +26,22 @@
   margin-bottom: $spacing-sm;
 }
 
+.statusconfirmed {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.statuspending {
+  background: rgba(255, 200, 0, 0.35);
+}
+
+.statuscompleted {
+  background: rgba(0, 180, 42, 0.35);
+}
+
+.statuscancelled {
+  background: rgba(153, 153, 153, 0.5);
+}
+
 .statusRoom {
   font-size: $font-size-xxl;
   font-weight: $font-weight-bold;

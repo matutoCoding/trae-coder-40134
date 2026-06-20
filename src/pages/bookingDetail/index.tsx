@@ -4,26 +4,13 @@ import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
 import { useAppStore } from '@/store';
 import { LEVEL_CONFIG } from '@/types/member';
+import { getBookingStatusText } from '@/utils';
 import styles from './index.module.scss';
-
-const statusLabel: Record<string, string> = {
-  confirmed: '已确认',
-  completed: '已完成',
-  cancelled: '已取消',
-  missed: '未到',
-};
-
-const statusClass: Record<string, string> = {
-  confirmed: 'statusConfirmed',
-  completed: 'statusCompleted',
-  cancelled: 'statusCancelled',
-  missed: 'statusMissed',
-};
 
 const BookingDetailPage: React.FC = () => {
   const router = useRouter();
   const { bookings, rooms, member, cancelBooking } = useAppStore();
-  const bookingId = router.params.id;
+  const bookingId = router.params?.id as string;
 
   const booking = useMemo(
     () => bookings.find(b => b.id === bookingId),
@@ -36,6 +23,7 @@ const BookingDetailPage: React.FC = () => {
   );
 
   const levelConfig = LEVEL_CONFIG[member.level];
+  const equipmentLevel = room ? LEVEL_CONFIG[room.equipmentLevel] : null;
 
   const handleCancel = () => {
     if (!booking || booking.status !== 'confirmed') return;
@@ -44,10 +32,14 @@ const BookingDetailPage: React.FC = () => {
       content: '取消预约后，1小时练习额度将退回，该鼓房时段也会被释放。',
       confirmText: '确认取消',
       cancelText: '再想想',
+      confirmColor: '#f53f3f',
       success: (res) => {
         if (res.confirm) {
           cancelBooking(booking.id);
-          Taro.showToast({ title: '已取消', icon: 'success' });
+          Taro.showToast({ title: '已取消，额度已退回', icon: 'success' });
+          setTimeout(() => {
+            Taro.navigateBack();
+          }, 1000);
         }
       },
     });
@@ -64,8 +56,8 @@ const BookingDetailPage: React.FC = () => {
   return (
     <View className={styles.page}>
       <View className={styles.statusCard}>
-        <View className={styles.statusBadge}>
-          {statusLabel[booking.status]}
+        <View className={classnames(styles.statusBadge, styles[`status${booking.status}`])}>
+          {getBookingStatusText(booking.status)}
         </View>
         <Text className={styles.statusRoom}>{room?.name || '鼓房'}</Text>
         <Text className={styles.statusTime}>
@@ -83,21 +75,33 @@ const BookingDetailPage: React.FC = () => {
           <Text className={styles.infoValue}>1 小时</Text>
         </View>
         <View className={styles.infoRow}>
-          <Text className={styles.infoLabel}>预约时间</Text>
+          <Text className={styles.infoLabel}>预约日期</Text>
+          <Text className={styles.infoValue}>{booking.date}</Text>
+        </View>
+        <View className={styles.infoRow}>
+          <Text className={styles.infoLabel}>练习时段</Text>
           <Text className={styles.infoValue}>
-            {booking.date} {booking.startTime} - {booking.endTime}
+            {booking.startTime} - {booking.endTime}
           </Text>
         </View>
         <View className={styles.infoRow}>
           <Text className={styles.infoLabel}>鼓房</Text>
           <Text className={styles.infoValue}>{room?.name || '-'}</Text>
         </View>
-        <View className={styles.infoRow}>
-          <Text className={styles.infoLabel}>设备等级</Text>
-          <Text className={styles.infoValue}>
-            {room ? LEVEL_CONFIG[room.equipmentLevel].label : '-'}
-          </Text>
-        </View>
+        {room && (
+          <View className={styles.infoRow}>
+            <Text className={styles.infoLabel}>鼓房位置</Text>
+            <Text className={styles.infoValue}>{room.floor}F</Text>
+          </View>
+        )}
+        {equipmentLevel && (
+          <View className={styles.infoRow}>
+            <Text className={styles.infoLabel}>设备等级</Text>
+            <Text className={styles.infoValue} style={{ color: equipmentLevel.color }}>
+              {equipmentLevel.label}
+            </Text>
+          </View>
+        )}
         <View className={styles.infoRow}>
           <Text className={styles.infoLabel}>会员等级</Text>
           <Text className={styles.infoValue} style={{ color: levelConfig.color }}>

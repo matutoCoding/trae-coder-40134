@@ -2,11 +2,34 @@ import React from 'react';
 import { View, Text } from '@tarojs/components';
 import classnames from 'classnames';
 import type { TimeBlock } from '@/types/room';
+import { getTimeBlockStatusText } from '@/utils';
 import styles from './index.module.scss';
 
 interface ScheduleTimelineProps {
   schedule: TimeBlock[];
 }
+
+const getDotClass = (status: TimeBlock['status']) => {
+  switch (status) {
+    case 'free': return styles.dotFree;
+    case 'booked-self': return styles.dotSelf;
+    case 'booked-other': return styles.dotOther;
+    case 'maintenance': return styles.dotMaintenance;
+    case 'unavailable': return styles.dotUnavailable;
+    default: return styles.dotFree;
+  }
+};
+
+const getStatusClass = (status: TimeBlock['status']) => {
+  switch (status) {
+    case 'free': return styles.statusFree;
+    case 'booked-self': return styles.statusSelf;
+    case 'booked-other': return styles.statusOther;
+    case 'maintenance': return styles.statusMaintenance;
+    case 'unavailable': return styles.statusUnavailable;
+    default: return styles.statusFree;
+  }
+};
 
 const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedule }) => {
   if (schedule.length === 0) {
@@ -23,10 +46,7 @@ const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedule }) => {
         <View key={index} className={styles.block}>
           <View className={styles.dotWrap}>
             <View
-              className={classnames(
-                styles.dot,
-                block.status === 'booked' ? styles.dotBooked : styles.dotFree
-              )}
+              className={classnames(styles.dot, getDotClass(block.status)}
             />
             {index < schedule.length - 1 && <View className={styles.line} />}
           </View>
@@ -35,12 +55,9 @@ const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedule }) => {
               {block.startTime}-{block.endTime}
             </Text>
             <Text
-              className={classnames(
-                styles.status,
-                block.status === 'booked' ? styles.statusBooked : styles.statusFree
-              )}
+              className={classnames(styles.status, getStatusClass(block.status))}
             >
-              {block.status === 'booked' ? '已预约' : '空闲'}
+              {getTimeBlockStatusText(block.status)}
             </Text>
           </View>
         </View>

@@ -32,8 +32,20 @@
   background: $color-free;
 }
 
-.dotBooked {
+.dotSelf {
+  background: $color-primary;
+}
+
+.dotOther {
   background: $color-occupied;
+}
+
+.dotMaintenance {
+  background: $color-error;
+}
+
+.dotUnavailable {
+  background: $color-text-tertiary;
 }
 
 .line {
@@ -69,8 +81,20 @@
   color: $color-free;
 }
 
-.statusBooked {
+.statusSelf {
+  color: $color-primary;
+}
+
+.statusOther {
   color: $color-occupied;
+}
+
+.statusMaintenance {
+  color: $color-error;
+}
+
+.statusUnavailable {
+  color: $color-text-tertiary;
 }
 
 .empty {

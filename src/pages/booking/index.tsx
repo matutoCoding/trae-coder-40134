@@ -45,7 +45,7 @@ const BookingPage: React.FC = () => {
       const isMyBooked = myBookings.some(b => b.startTime === slot.startTime);
       const hasFreeRoom = rooms.some(room => {
         if (room.status === 'maintenance') return false;
-        const sched = getDaySchedule(room, bookings, currentDate);
+        const sched = getDaySchedule(room, bookings, currentDate, member.id);
         return sched.blocks.some(b => b.startTime === slot.startTime && b.status === 'free');
       });
       return { ...slot, available: !isMyBooked && hasFreeRoom };
@@ -64,7 +64,7 @@ const BookingPage: React.FC = () => {
       return;
     }
     setSelectedSlot(slot.startTime);
-    const result = allocateRoom(rooms, bookings, currentDate, slot.startTime);
+    const result = allocateRoom(rooms, bookings, currentDate, slot.startTime, member.id);
     setAllocationResult(result);
   };
 

@@ -13,7 +13,7 @@ type StatusFilter = 'all' | 'free' | 'partial' | 'full' | 'maintenance';
 type EquipFilter = 'all' | 'standard' | 'professional' | 'premium';
 
 const RoomsPage: React.FC = () => {
-  const { rooms, bookings } = useAppStore();
+  const { rooms, bookings, member } = useAppStore();
   const [selectedDate, setSelectedDate] = useState(0);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [equipFilter, setEquipFilter] = useState<EquipFilter>('all');
@@ -35,10 +35,10 @@ const RoomsPage: React.FC = () => {
 
   const roomSchedules = useMemo(() => {
     return rooms.map(room => {
-      const schedule = getDaySchedule(room, bookings, currentDate);
+      const schedule = getDaySchedule(room, bookings, currentDate, member.id);
       return { room, schedule };
     });
-  }, [rooms, bookings, currentDate]);
+  }, [rooms, bookings, currentDate, member.id]);
 
   const freeCount = roomSchedules.filter(
     ({ room, schedule }) => room.status !== 'maintenance' && schedule.dayStatus === 'free'

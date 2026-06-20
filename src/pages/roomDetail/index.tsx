@@ -4,14 +4,47 @@ import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import { useAppStore } from '@/store';
-import { getDaySchedule, getEquipmentLevelText } from '@/utils';
+import { getDaySchedule, getEquipmentLevelText, getTimeBlockStatusText } from '@/utils';
 import type { TimeBlock } from '@/types/room';
 import styles from './index.module.scss';
+
+const getDotClass = (status: TimeBlock['status']) => {
+  switch (status) {
+    case 'free': return 'dotFree';
+    case 'booked-self': return 'dotSelf';
+    case 'booked-other': return 'dotOther';
+    case 'maintenance': return 'dotMaintenance';
+    case 'unavailable': return 'dotUnavailable';
+    default: return 'dotFree';
+  }
+};
+
+const getLineClass = (status: TimeBlock['status']) => {
+  switch (status) {
+    case 'free': return 'lineFree';
+    case 'booked-self': return 'lineSelf';
+    case 'booked-other': return 'lineOther';
+    case 'maintenance': return 'lineMaintenance';
+    case 'unavailable': return 'lineUnavailable';
+    default: return 'lineFree';
+  }
+};
+
+const getStatusClass = (status: TimeBlock['status']) => {
+  switch (status) {
+    case 'free': return 'statusFree';
+    case 'booked-self': return 'statusSelf';
+    case 'booked-other': return 'statusOther';
+    case 'maintenance': return 'statusMaintenance';
+    case 'unavailable': return 'statusUnavailable';
+    default: return 'statusFree';
+  }
+};
 
 const RoomDetailPage: React.FC = () => {
   const router = useRouter();
   const roomId = router.params.id as string;
-  const { rooms, bookings } = useAppStore();
+  const { rooms, bookings, member } = useAppStore();
   const [selectedDate, setSelectedDate] = useState(0);
 
   const room = useMemo(() => rooms.find(r => r.id === roomId), [rooms, roomId]);
@@ -32,8 +65,8 @@ const RoomDetailPage: React.FC = () => {
   const currentDate = dates[selectedDate]?.fullDate || '';
   const schedule = useMemo(() => {
     if (!room) return null;
-    return getDaySchedule(room, bookings, currentDate);
-  }, [room, bookings, currentDate]);
+    return getDaySchedule(room, bookings, currentDate, member.id);
+  }, [room, bookings, currentDate, member.id]);
 
   const sortedBlocks = useMemo(() => {
     if (!schedule) return [];
@@ -109,13 +142,28 @@ const RoomDetailPage: React.FC = () => {
         </View>
       </View>
 
+      <View className={styles.legendSection}>
+        <View className={styles.legendItem}>
+          <View className={classnames(styles.legendDot, styles.dotSelf)} />
+          <Text className={styles.legendText}>我的预约</Text>
+        </View>
+        <View className={styles.legendItem}>
+          <View className={classnames(styles.legendDot, styles.dotOther)} />
+          <Text className={styles.legendText}>其他学员</Text>
+        </View>
+        <View className={styles.legendItem}>
+          <View className={classnames(styles.legendDot, styles.dotFree)} />
+          <Text className={styles.legendText}>空闲</Text>
+        </View>
+        <View className={styles.legendItem}>
+          <View className={classnames(styles.legendDot, styles.dotMaintenance)} />
+          <Text className={styles.legendText}>维修</Text>
+        </View>
+      </View>
+
       <View className={styles.scheduleSection}>
         <Text className={styles.sectionLabel}>当日排期</Text>
-        {isMaintenance ? (
-          <View className={styles.maintenanceTip}>
-            <Text className={styles.maintenanceText}>🔧 鼓房维修中，暂不可用</Text>
-          </View>
-        ) : sortedBlocks.length === 0 ? (
+        {sortedBlocks.length === 0 ? (
           <View className={styles.empty}>
             <Text className={styles.emptyText}>暂无排期信息</Text>
           </View>
@@ -127,15 +175,13 @@ const RoomDetailPage: React.FC = () => {
                   <View
                     className={classnames(
                       styles.timelineDot,
-                      block.status === 'booked' ? styles.dotBooked : styles.dotFree
-                    )}
+                      styles[getDotClass(block.status)]}
                   />
                   {index < sortedBlocks.length - 1 && (
                     <View
                       className={classnames(
                         styles.timelineLine,
-                        block.status === 'booked' ? styles.lineBooked : styles.lineFree
-                      )}
+                        styles[getLineClass(block.status)]}
                     />
                   )}
                 </View>
@@ -147,13 +193,13 @@ const RoomDetailPage: React.FC = () => {
                     <Text
                       className={classnames(
                         styles.timelineStatus,
-                        block.status === 'booked' ? styles.statusBooked : styles.statusFree
+                        styles[getStatusClass(block.status)]
                       )}
                     >
-                      {block.status === 'booked' ? '已预约' : '空闲'}
+                      {getTimeBlockStatusText(block.status)}
                     </Text>
                   </View>
-                  {block.status === 'booked' && block.memberName && (
+                  {(block.status === 'booked-self' || block.status === 'booked-other') && block.memberName && (
                     <Text className={styles.memberName}>
                       👤 {block.memberName}
                     </Text>

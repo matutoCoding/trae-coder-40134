@@ -13,7 +13,7 @@ export interface Room {
 export interface TimeBlock {
   startTime: string;
   endTime: string;
-  status: 'free' | 'booked';
+  status: 'free' | 'booked-self' | 'booked-other' | 'maintenance' | 'unavailable';
   bookingId?: string;
   memberName?: string;
 }

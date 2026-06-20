@@ -173,8 +173,20 @@
   background: $color-free;
 }
 
-.dotBooked {
+.dotSelf {
+  background: $color-primary;
+}
+
+.dotOther {
   background: $color-occupied;
+}
+
+.dotMaintenance {
+  background: $color-error;
+}
+
+.dotUnavailable {
+  background: $color-text-tertiary;
 }
 
 .timelineLine {
@@ -187,8 +199,20 @@
   background: rgba(0, 180, 42, 0.2);
 }
 
-.lineBooked {
+.lineSelf {
+  background: rgba(108, 92, 231, 0.3);
+}
+
+.lineOther {
   background: rgba(255, 125, 0, 0.2);
+}
+
+.lineMaintenance {
+  background: rgba(245, 63, 63, 0.2);
+}
+
+.lineUnavailable {
+  background: rgba(153, 153, 153, 0.2);
 }
 
 .timelineContent {
@@ -225,8 +249,47 @@
   color: $color-free;
 }
 
-.statusBooked {
+.statusSelf {
+  color: $color-primary;
+}
+
+.statusOther {
   color: $color-occupied;
+}
+
+.statusMaintenance {
+  color: $color-error;
+}
+
+.statusUnavailable {
+  color: $color-text-tertiary;
+}
+
+.legendSection {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 $spacing-lg;
+  margin-bottom: $spacing-md;
+  gap: $spacing-md;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  margin-right: $spacing-md;
+}
+
+.legendDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  margin-right: $spacing-xs;
+  flex-shrink: 0;
+}
+
+.legendText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
 }
 
 .memberName {

@@ -1,5 +1,16 @@
 import type { Room } from '@/types/room';
 
+const standardSchedule = [
+  { startTime: '09:00', endTime: '10:00', status: 'free' as const },
+  { startTime: '10:00', endTime: '11:00', status: 'free' as const },
+  { startTime: '11:00', endTime: '12:00', status: 'free' as const },
+  { startTime: '14:00', endTime: '15:00', status: 'free' as const },
+  { startTime: '15:00', endTime: '16:00', status: 'free' as const },
+  { startTime: '16:00', endTime: '17:00', status: 'free' as const },
+  { startTime: '19:00', endTime: '20:00', status: 'free' as const },
+  { startTime: '20:00', endTime: '21:00', status: 'free' as const },
+];
+
 export const mockRooms: Room[] = [
   {
     id: 'R001',
@@ -7,16 +18,7 @@ export const mockRooms: Room[] = [
     floor: 1,
     equipmentLevel: 'standard',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'booked' },
-      { startTime: '10:00', endTime: '11:00', status: 'free' },
-      { startTime: '11:00', endTime: '12:00', status: 'free' },
-      { startTime: '14:00', endTime: '15:00', status: 'booked' },
-      { startTime: '15:00', endTime: '16:00', status: 'free' },
-      { startTime: '16:00', endTime: '17:00', status: 'free' },
-      { startTime: '19:00', endTime: '20:00', status: 'booked' },
-      { startTime: '20:00', endTime: '21:00', status: 'free' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R002',
@@ -24,16 +26,7 @@ export const mockRooms: Room[] = [
     floor: 1,
     equipmentLevel: 'professional',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'booked' },
-      { startTime: '10:00', endTime: '11:00', status: 'booked' },
-      { startTime: '11:00', endTime: '12:00', status: 'booked' },
-      { startTime: '14:00', endTime: '15:00', status: 'booked' },
-      { startTime: '15:00', endTime: '16:00', status: 'booked' },
-      { startTime: '16:00', endTime: '17:00', status: 'free' },
-      { startTime: '19:00', endTime: '20:00', status: 'booked' },
-      { startTime: '20:00', endTime: '21:00', status: 'booked' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R003',
@@ -41,16 +34,7 @@ export const mockRooms: Room[] = [
     floor: 2,
     equipmentLevel: 'premium',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'free' },
-      { startTime: '10:00', endTime: '11:00', status: 'free' },
-      { startTime: '11:00', endTime: '12:00', status: 'booked' },
-      { startTime: '14:00', endTime: '15:00', status: 'free' },
-      { startTime: '15:00', endTime: '16:00', status: 'free' },
-      { startTime: '16:00', endTime: '17:00', status: 'free' },
-      { startTime: '19:00', endTime: '20:00', status: 'free' },
-      { startTime: '20:00', endTime: '21:00', status: 'free' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R004',
@@ -58,7 +42,7 @@ export const mockRooms: Room[] = [
     floor: 2,
     equipmentLevel: 'standard',
     status: 'maintenance',
-    baseSchedule: [],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R005',
@@ -66,16 +50,7 @@ export const mockRooms: Room[] = [
     floor: 3,
     equipmentLevel: 'professional',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'booked' },
-      { startTime: '10:00', endTime: '11:00', status: 'booked' },
-      { startTime: '11:00', endTime: '12:00', status: 'free' },
-      { startTime: '14:00', endTime: '15:00', status: 'booked' },
-      { startTime: '15:00', endTime: '16:00', status: 'free' },
-      { startTime: '16:00', endTime: '17:00', status: 'free' },
-      { startTime: '19:00', endTime: '20:00', status: 'booked' },
-      { startTime: '20:00', endTime: '21:00', status: 'free' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R006',
@@ -83,16 +58,7 @@ export const mockRooms: Room[] = [
     floor: 3,
     equipmentLevel: 'premium',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'booked' },
-      { startTime: '10:00', endTime: '11:00', status: 'booked' },
-      { startTime: '11:00', endTime: '12:00', status: 'booked' },
-      { startTime: '14:00', endTime: '15:00', status: 'booked' },
-      { startTime: '15:00', endTime: '16:00', status: 'booked' },
-      { startTime: '16:00', endTime: '17:00', status: 'booked' },
-      { startTime: '19:00', endTime: '20:00', status: 'booked' },
-      { startTime: '20:00', endTime: '21:00', status: 'free' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R007',
@@ -100,16 +66,7 @@ export const mockRooms: Room[] = [
     floor: 1,
     equipmentLevel: 'standard',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'free' },
-      { startTime: '10:00', endTime: '11:00', status: 'free' },
-      { startTime: '11:00', endTime: '12:00', status: 'free' },
-      { startTime: '14:00', endTime: '15:00', status: 'booked' },
-      { startTime: '15:00', endTime: '16:00', status: 'free' },
-      { startTime: '16:00', endTime: '17:00', status: 'free' },
-      { startTime: '19:00', endTime: '20:00', status: 'free' },
-      { startTime: '20:00', endTime: '21:00', status: 'free' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R008',
@@ -117,16 +74,7 @@ export const mockRooms: Room[] = [
     floor: 2,
     equipmentLevel: 'professional',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'booked' },
-      { startTime: '10:00', endTime: '11:00', status: 'booked' },
-      { startTime: '11:00', endTime: '12:00', status: 'booked' },
-      { startTime: '14:00', endTime: '15:00', status: 'free' },
-      { startTime: '15:00', endTime: '16:00', status: 'booked' },
-      { startTime: '16:00', endTime: '17:00', status: 'free' },
-      { startTime: '19:00', endTime: '20:00', status: 'booked' },
-      { startTime: '20:00', endTime: '21:00', status: 'booked' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R009',
@@ -134,16 +82,7 @@ export const mockRooms: Room[] = [
     floor: 3,
     equipmentLevel: 'standard',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'free' },
-      { startTime: '10:00', endTime: '11:00', status: 'booked' },
-      { startTime: '11:00', endTime: '12:00', status: 'free' },
-      { startTime: '14:00', endTime: '15:00', status: 'free' },
-      { startTime: '15:00', endTime: '16:00', status: 'free' },
-      { startTime: '16:00', endTime: '17:00', status: 'booked' },
-      { startTime: '19:00', endTime: '20:00', status: 'free' },
-      { startTime: '20:00', endTime: '21:00', status: 'free' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
   {
     id: 'R010',
@@ -151,15 +90,6 @@ export const mockRooms: Room[] = [
     floor: 1,
     equipmentLevel: 'premium',
     status: 'active',
-    baseSchedule: [
-      { startTime: '09:00', endTime: '10:00', status: 'booked' },
-      { startTime: '10:00', endTime: '11:00', status: 'booked' },
-      { startTime: '11:00', endTime: '12:00', status: 'free' },
-      { startTime: '14:00', endTime: '15:00', status: 'booked' },
-      { startTime: '15:00', endTime: '16:00', status: 'booked' },
-      { startTime: '16:00', endTime: '17:00', status: 'booked' },
-      { startTime: '19:00', endTime: '20:00', status: 'free' },
-      { startTime: '20:00', endTime: '21:00', status: 'booked' },
-    ],
+    baseSchedule: [...standardSchedule],
   },
 ];
